@@ -1,0 +1,85 @@
+package com.demo.demo.service;
+
+import com.demo.demo.DAO.FileRepository;
+import com.demo.demo.model.File;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Optional;
+
+@Slf4j
+@Service
+public class FileServiceImplement  implements  FileServiceInterface{
+    private final FileRepository fileRepository;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileServiceImplement.class.getName());
+   @Autowired
+    public FileServiceImplement(FileRepository fileRepository) {
+        this.fileRepository = fileRepository;
+    }
+
+    @Override
+    public ResponseEntity<?> uploadFile(MultipartFile fileToBeUploaded) {
+       try{
+       if(! this.fileRepository.existsByFilename(fileToBeUploaded.getOriginalFilename())) {
+           File file = new File();
+           file.setFilename(fileToBeUploaded.getOriginalFilename());
+           file.setContentType(fileToBeUploaded.getContentType());
+           file.setSize(fileToBeUploaded.getSize());
+           file.setData(fileToBeUploaded.getBytes());
+           return new ResponseEntity<>("File Uploaded Successfully "+fileRepository.save(file), HttpStatus.CREATED);
+       }else {
+           return new ResponseEntity<>("File Already Exists", HttpStatus.CONFLICT);
+       }
+       }
+       catch (IOException e){
+           LOGGER.error("errro getting data from file " +e.getMessage());
+           return new ResponseEntity<>("error  when getting data from file", HttpStatus.BAD_REQUEST);
+       }
+
+    }
+
+    @Override
+    public ResponseEntity<?> downloadFile(String fileName) {
+        Optional<File> optionalFile = this.fileRepository.findByFilename(fileName);
+        if(optionalFile.isPresent()) {
+            File file = optionalFile.get();
+            return new ResponseEntity<>(file, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+    }
+Path imagePath= Paths.get("uploads/pdf");
+    @Override
+    public String saveImage(MultipartFile file) {
+     String originalFilename=file.getOriginalFilename();
+     String extension= originalFilename.substring(originalFilename.lastIndexOf("."));
+     String randomNamed= RandomStringUtils.randomAlphanumeric(10)+extension;
+     File filez = new File();
+     filez.setFilename(randomNamed);
+     fileRepository.save(filez);
+     try{
+         Files.copy(file.getInputStream(),imagePath.resolve(randomNamed));
+     }catch (IOException e){
+         throw  new RuntimeException(e);
+     }
+     return randomNamed;
+    }
+
+    @Override
+    public Byte[] afficherImage(String filename) {
+        return new Byte[0];
+    }
+}
