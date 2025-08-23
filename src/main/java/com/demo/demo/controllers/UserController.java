@@ -1,5 +1,6 @@
 package com.demo.demo.controllers;
 
+import com.demo.demo.entities.RoleName;
 import com.demo.demo.entities.UserEntity;
 import com.demo.demo.services.UserInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,4 +87,9 @@ public class UserController {
         return userInterface.getUserByEmail(cle);
 
     }
-}
+     @PostMapping("addwithroles")
+    public UserEntity createUserWithRoles(@RequestBody UserEntity user,@RequestParam Set<RoleName> roles
+     ){
+        return userInterface.createUserWithRole(user,roles);
+
+     }}

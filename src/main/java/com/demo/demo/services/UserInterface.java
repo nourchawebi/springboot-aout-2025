@@ -1,8 +1,10 @@
 package com.demo.demo.services;
 
+import com.demo.demo.entities.RoleName;
 import com.demo.demo.entities.UserEntity;
 
 import java.util.List;
+import java.util.Set;
 
 public interface UserInterface {
     UserEntity adduser(UserEntity user);
@@ -16,4 +18,5 @@ public interface UserInterface {
     UserEntity getUserByUsername(String username);
     List<UserEntity>getUserSWT(String un);
     List<UserEntity>getUserByEmail(String un);
+    UserEntity createUserWithRole(UserEntity user, Set<RoleName> roleNames);
 }

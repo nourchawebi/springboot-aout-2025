@@ -1,10 +1,10 @@
 package com.demo.demo.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
@@ -12,5 +12,8 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int idrole;
-    private   RoleName RoleName;
+    @Enumerated(EnumType.STRING)
+    private   RoleName roleName;
+    @ManyToMany(mappedBy="role")
+    private Set<UserEntity> users = new HashSet<>();
 }
