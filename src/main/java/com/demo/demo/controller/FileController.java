@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URLConnection;
+
 @RestController
 @RequestMapping("file")
 public class FileController {
@@ -39,5 +41,15 @@ public class FileController {
     public ResponseEntity<?> uploadFolder(@RequestParam("file") MultipartFile file) {
         String savedFilename=this.fileService.saveImage(file);
         return ResponseEntity.ok().body("file saved with name:" +savedFilename);
+    }
+    @GetMapping("folder/{filename}")
+    public ResponseEntity<byte[]> downloadFolder(@PathVariable("filename") String filename) {
+        byte [] fileData=fileService.afficherImage(filename);
+        String mimeType= URLConnection.guessContentTypeFromName(filename);
+        if(mimeType==null){
+            mimeType= MediaType.APPLICATION_OCTET_STREAM.toString();
+        }
+        return ResponseEntity.ok().contentType(MediaType.parseMediaType(mimeType)).body(fileData);
+
     }
 }

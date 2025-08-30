@@ -7,5 +7,5 @@ public interface FileServiceInterface {
    ResponseEntity<?> uploadFile(MultipartFile fileToBeUploaded);
     ResponseEntity<?>  downloadFile(String fileName);
      String saveImage(MultipartFile file);
-     Byte [] afficherImage(String filename);
+     byte [] afficherImage(String filename);
 }

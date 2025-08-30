@@ -79,7 +79,13 @@ Path imagePath= Paths.get("uploads/pdf");
     }
 
     @Override
-    public Byte[] afficherImage(String filename) {
-        return new Byte[0];
+    public byte[] afficherImage(String filename) {
+        try{
+            Path filePath=imagePath.resolve(filename);
+            return Files.readAllBytes(filePath);
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
