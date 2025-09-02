@@ -6,16 +6,18 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
+
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long  idpost;
-    private String title;
-    private String content;
-    @Temporal(TemporalType.TIMESTAMP)
+    private Long id ;
+    public String title;
+    public String content;
+    @Temporal(TemporalType.DATE)
     private Date created;
-   @ManyToOne
+    @ManyToOne
     private UserEntity user;
-   @OneToMany(mappedBy="post" , cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "post",cascade=CascadeType.ALL,fetch= FetchType.LAZY)
     private List<Comment> comments;
+
 }

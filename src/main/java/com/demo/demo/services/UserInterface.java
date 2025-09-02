@@ -18,5 +18,5 @@ public interface UserInterface {
     UserEntity getUserByUsername(String username);
     List<UserEntity>getUserSWT(String un);
     List<UserEntity>getUserByEmail(String un);
-    UserEntity createUserWithRole(UserEntity user, Set<RoleName> roleNames);
+
 }

@@ -68,8 +68,8 @@ public class UserImplement implements UserInterface {
         this.user = user;
         this.id = id;
         UserEntity u = userRepo.findById(id).orElse(null);
-        u.setFirstname((user.getFirstname()));
-        u.setLastname((user.getLastname()));
+        u.setFirstName((user.getFirstName()));
+        u.setLastName((user.getLastName()));
         return userRepo.save(u);
     }
 
@@ -98,18 +98,5 @@ public class UserImplement implements UserInterface {
         return userRepo.findbydomaine(un);
     }
 
-    @Override
-    public UserEntity createUserWithRole(UserEntity user, Set<RoleName> roleNames) {
 
-        for (RoleName roleName : roleNames) {
-            Role role = roleRepo.findRoleByRoleName(roleName)
-                    .orElseGet(() -> {
-                        Role newRole = new Role();
-                        newRole.setRoleName(roleName);
-                        return roleRepo.save(newRole);
-                    });
-            user.getRole().add(role);
-        }
-         return userRepo.save(user);
-    }
 }

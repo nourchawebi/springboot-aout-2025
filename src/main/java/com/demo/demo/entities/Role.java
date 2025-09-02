@@ -1,19 +1,29 @@
 package com.demo.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.apache.catalina.User;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Data
 public class Role {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int idrole;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idrole;
     @Enumerated(EnumType.STRING)
-    private   RoleName roleName;
-    @ManyToMany(mappedBy="role")
-    private Set<UserEntity> users = new HashSet<>();
+    private RoleName rolename;
+    // One role can be assigned to many users
+    @JsonIgnore
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
+    private List<UserEntity> users = new ArrayList<>();
+    @Override
+    public int hashCode() {
+        return rolename != null ? rolename.hashCode() : 0;
+    }
 }

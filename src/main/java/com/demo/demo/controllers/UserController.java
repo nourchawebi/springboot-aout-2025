@@ -87,9 +87,4 @@ public class UserController {
         return userInterface.getUserByEmail(cle);
 
     }
-     @PostMapping("addwithroles")
-    public UserEntity createUserWithRoles(@RequestBody UserEntity user,@RequestParam Set<RoleName> roles
-     ){
-        return userInterface.createUserWithRole(user,roles);
-
-     }}
+   }
